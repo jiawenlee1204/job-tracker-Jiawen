@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>求职记录管理 - 登录</title>
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF9EAA',
+                        secondary: '#FFD384',
+                        accent: '#9DD6DF',
+                        light: '#FFF5F5',
+                        dark: '#5D5D5D'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'bounce-slow': 'bounce 3s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float-slow': 'float 8s ease-in-out infinite',
+                        'float-reverse': 'floatReverse 7s ease-in-out infinite',
+                        'wiggle': 'wiggle 2s ease-in-out infinite',
+                        'glow': 'glow 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        floatReverse: {
+                            '0%, 100%': { transform: 'translateY(-10px)' },
+                            '50%': { transform: 'translateY(0)' },
+                        },
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' },
+                        },
+                        glow: {
+                            '0%, 100%': { opacity: '0.6' },
+                            '50%': { opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .card-shadow {
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            }
+            .gradient-bg {
+                background: linear-gradient(135deg, #FFF5F5 0%, #FFF9E6 25%, #FFE8D6 50%, #FFE4E1 75%, #FFF0F5 100%);
+                position: relative;
+                overflow-x: hidden;
+            }
+            .gradient-bg::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-image: 
+                    radial-gradient(circle at 10% 20%, rgba(255, 182, 193, 0.15) 0%, transparent 50%),
+                    radial-gradient(circle at 90% 30%, rgba(255, 218, 185, 0.15) 0%, transparent 50%),
+                    radial-gradient(circle at 20% 80%, rgba(221, 160, 221, 0.12) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 70%, rgba(173, 216, 230, 0.12) 0%, transparent 50%),
+                    radial-gradient(circle at 50% 50%, rgba(255, 255, 224, 0.1) 0%, transparent 60%);
+                pointer-events: none;
+                z-index: 0;
+            }
+            .gradient-bg::after {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FFB6C1' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+                pointer-events: none;
+                z-index: 0;
+            }
+            .quote-shadow {
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            }
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex flex-col relative overflow-x-hidden">
+    <!-- 装饰元素 - 插花糖果屋风格 -->
+    <div class="fixed pointer-events-none z-0 opacity-40" style="left: 5%; top: 15%; animation: float 6s ease-in-out infinite;">
+        <svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="8" fill="#FFB6C1" opacity="0.5"/>
+            <circle cx="35" cy="40" r="6" fill="#FFC0CB" opacity="0.4"/>
+            <circle cx="65" cy="40" r="6" fill="#FFC0CB" opacity="0.4"/>
+            <circle cx="50" cy="35" r="5" fill="#FFD700" opacity="0.5"/>
+            <path d="M50 55 Q45 65 50 75 Q55 65 50 55" fill="#98FB98" opacity="0.4"/>
+        </svg>
+    </div>
+    <div class="fixed pointer-events-none z-0 opacity-40" style="right: 8%; top: 25%; animation: floatReverse 7s ease-in-out infinite;">
+        <svg width="55" height="55" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,15 60,40 85,40 65,55 75,80 50,65 25,80 35,55 15,40 40,40" fill="#FFD700" opacity="0.3"/>
+            <circle cx="50" cy="45" r="12" fill="#FF69B4" opacity="0.4"/>
+        </svg>
+    </div>
+    <div class="fixed pointer-events-none z-0 opacity-40" style="left: 10%; bottom: 20%; animation: wiggle 2s ease-in-out infinite;">
+        <svg width="50" height="50" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="25" y="35" width="50" height="40" rx="5" fill="#FFB6C1" opacity="0.3"/>
+            <polygon points="50,15 75,35 25,35" fill="#FF69B4" opacity="0.35"/>
+            <rect x="42" y="50" width="16" height="25" fill="#FFF" opacity="0.5"/>
+        </svg>
+    </div>
+    <div class="fixed pointer-events-none z-0 opacity-40" style="right: 12%; bottom: 30%; animation: glow 3s ease-in-out infinite;">
+        <svg width="45" height="45" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="8" fill="#FF69B4" opacity="0.4"/>
+            <circle cx="50" cy="50" r="5" fill="#FFD700" opacity="0.5"/>
+            <circle cx="50" cy="50" r="2" fill="#FFF" opacity="0.6"/>
+        </svg>
+    </div>
+
+    <!-- 名言/文学摘抄模块 -->
+    <div id="quote-container" class="fixed top-0 left-0 right-0 bg-white bg-opacity-90 p-4 transform -translate-y-full transition-transform duration-500 ease-in-out z-50 quote-shadow">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <i class="fa fa-quote-left text-primary text-2xl mr-3"></i>
+                <div>
+                    <p id="quote-text" class="text-gray-700 italic">每一次挑战都是成长的机会，每一次拒绝都是向成功更近一步。</p>
+                    <p id="quote-author" class="text-sm text-gray-500 mt-1">— 匿名</p>
+                </div>
+            </div>
+            <button id="close-quote" class="text-gray-500 hover:text-primary transition-colors">
+                <i class="fa fa-times text-xl"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="flex-grow flex items-center justify-center p-4 relative z-10">
+        <div class="w-full max-w-md">
+            <!-- 登录卡片 -->
+            <div class="bg-white rounded-2xl p-8 card-shadow transform transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1">
+                <div class="text-center mb-8">
+                    <h1 class="text-3xl font-bold text-gray-800 mb-2">求职记录管理</h1>
+                    <p class="text-gray-600">记录每一步，成就更好的自己</p>
+                </div>
+                
+                <!-- 卡通形象 -->
+                <div class="flex justify-center mb-8">
+                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/442ec9f5b0944f7bb543b131d6c57084~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260313000259224AE94A46A2D00FFBFA&rrcfp=f06b921b&x-expires=1775923442&x-signature=6dn3MGPS75myYfvxozWv3tDBGjo%3D" 
+                         alt="小熊和小兔子" 
+                         class="h-32 object-contain animate-float">
+                </div>
+                
+                <!-- 登录表单 -->
+                <form id="login-form" class="space-y-6">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">用户名</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                                <i class="fa fa-user"></i>
+                            </span>
+                            <input type="text" id="username" name="username" 
+                                   class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                                   placeholder="请输入用户名" required>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">密码</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                                <i class="fa fa-lock"></i>
+                            </span>
+                            <input type="password" id="password" name="password" 
+                                   class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                                   placeholder="请输入密码" required>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input id="remember-me" name="remember-me" type="checkbox" 
+                                   class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                            <label for="remember-me" class="ml-2 block text-sm text-gray-700">
+                                记住我
+                            </label>
+                        </div>
+                        
+                        <a href="#" class="text-sm text-primary hover:text-primary-dark transition-colors">
+                            忘记密码?
+                        </a>
+                    </div>
+                    
+                    <div>
+                        <button type="submit" 
+                                class="w-full bg-primary hover:bg-opacity-90 text-white font-medium py-2 px-4 rounded-lg transition-colors transform hover:scale-[1.02] active:scale-[0.98]">
+                            登录
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- 注册链接 -->
+                <div class="text-center mt-6">
+                    <p class="text-sm text-gray-600">
+                        还没有账号? 
+                        <a href="#" id="register-link" class="text-primary hover:underline">立即注册</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 注册模态框 -->
+    <div id="register-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">创建账号</h2>
+                <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fa fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form id="register-form" class="space-y-6">
+                <div>
+                    <label for="new-username" class="block text-sm font-medium text-gray-700 mb-1">用户名</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                            <i class="fa fa-user"></i>
+                        </span>
+                        <input type="text" id="new-username" name="new-username" 
+                               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                               placeholder="请输入用户名" required>
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="new-password" class="block text-sm font-medium text-gray-700 mb-1">密码</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                            <i class="fa fa-lock"></i>
+                        </span>
+                        <input type="password" id="new-password" name="new-password" 
+                               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                               placeholder="请输入密码" required>
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="confirm-password" class="block text-sm font-medium text-gray-700 mb-1">确认密码</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                            <i class="fa fa-lock"></i>
+                        </span>
+                        <input type="password" id="confirm-password" name="confirm-password" 
+                               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                               placeholder="请再次输入密码" required>
+                    </div>
+                </div>
+                
+                <div>
+                    <button type="submit" 
+                            class="w-full bg-primary hover:bg-opacity-90 text-white font-medium py-2 px-4 rounded-lg transition-colors transform hover:scale-[1.02] active:scale-[0.98]">
+                        注册
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 提示消息 -->
+    <div id="toast" class="fixed bottom-4 right-4 bg-white rounded-lg shadow-lg p-4 transform translate-y-20 opacity-0 transition-all duration-300 flex items-center z-50">
+        <div id="toast-icon" class="mr-3 text-xl"></div>
+        <div id="toast-message" class="text-gray-700"></div>
+    </div>
+
+    <script>
+        // 激励名言数据
+        const motivationalQuotes = [
+            { text: "每一次挑战都是成长的机会，每一次拒绝都是向成功更近一步。", author: "— 匿名" },
+            { text: "不要害怕失败，因为失败是成功的一部分。", author: "— 迈克尔·乔丹" },
+            { text: "成功不是终点，失败也不是末日，最重要的是继续前进的勇气。", author: "— 温斯顿·丘吉尔" },
+            { text: "你的时间有限，不要浪费在别人的生活里。", author: "— 史蒂夫·乔布斯" },
+            { text: "生活不是等待暴风雨过去，而是学会在雨中跳舞。", author: "— 维维安·格林" },
+            { text: "耐心是一种美德，也是成功的关键。", author: "— 匿名" },
+            { text: "每一个伟大的梦想都始于一个勇敢的开始。", author: "— 匿名" },
+            { text: "困难只是暂时的，坚持下去，你会感谢今天努力的自己。", author: "— 匿名" },
+            { text: "成功的秘诀在于始终如一地坚持目标。", author: "— 匿名" },
+            { text: "每一次面试都是一次学习的机会，无论结果如何。", author: "— 匿名" }
+        ];
+
+        // DOM 元素
+        const quoteContainer = document.getElementById('quote-container');
+        const quoteText = document.getElementById('quote-text');
+        const quoteAuthor = document.getElementById('quote-author');
+        const closeQuote = document.getElementById('close-quote');
+        const loginForm = document.getElementById('login-form');
+        const registerLink = document.getElementById('register-link');
+        const registerModal = document.getElementById('register-modal');
+        const modalContent = document.getElementById('modal-content');
+        const closeModal = document.getElementById('close-modal');
+        const registerForm = document.getElementById('register-form');
+        const toast = document.getElementById('toast');
+        const toastIcon = document.getElementById('toast-icon');
+        const toastMessage = document.getElementById('toast-message');
+
+        // 显示随机名言
+        function showRandomQuote() {
+            const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+            quoteText.textContent = randomQuote.text;
+            quoteAuthor.textContent = randomQuote.author;
+            
+            // 显示名言模块
+            setTimeout(() => {
+                quoteContainer.classList.remove('-translate-y-full');
+            }, 500);
+        }
+
+        // 关闭名言模块
+        closeQuote.addEventListener('click', () => {
+            quoteContainer.classList.add('-translate-y-full');
+        });
+
+        // 显示提示消息
+        function showToast(message, isSuccess = true) {
+            toastMessage.textContent = message;
+            toastIcon.className = `mr-3 text-xl ${isSuccess ? 'text-green-500' : 'text-red-500'}`;
+            toastIcon.innerHTML = isSuccess ? '<i class="fa fa-check-circle"></i>' : '<i class="fa fa-exclamation-circle"></i>';
+            
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // 打开注册模态框
+        registerLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerModal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        });
+
+        // 关闭注册模态框
+        closeModal.addEventListener('click', () => {
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                registerModal.classList.add('hidden');
+            }, 300);
+        });
+
+        // 点击模态框外部关闭
+        registerModal.addEventListener('click', (e) => {
+            if (e.target === registerModal) {
+                closeModal.click();
+            }
+        });
+
+        // 登录表单提交
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('remember-me').checked;
+            
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // 保存token和用户信息
+                    if (rememberMe) {
+                        localStorage.setItem('jobTrackerToken', data.token);
+                        localStorage.setItem('jobTrackerUser', JSON.stringify(data.user));
+                    } else {
+                        sessionStorage.setItem('jobTrackerToken', data.token);
+                        sessionStorage.setItem('jobTrackerUser', JSON.stringify(data.user));
+                    }
+                    
+                    showToast('登录成功！正在跳转...');
+                    
+                    // 跳转到主页面
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                } else {
+                    showToast(data.error || '登录失败', false);
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showToast('网络错误，请稍后重试', false);
+            }
+        });
+
+        // 注册表单提交
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('new-username').value;
+            const password = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            // 验证密码
+            if (password !== confirmPassword) {
+                showToast('两次输入的密码不一致', false);
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showToast('注册成功！请登录');
+                    closeModal.click();
+                    
+                    // 清空注册表单
+                    registerForm.reset();
+                } else {
+                    showToast(data.error || '注册失败', false);
+                }
+            } catch (error) {
+                console.error('Register error:', error);
+                showToast('网络错误，请稍后重试', false);
+            }
+        });
+
+        // 检查是否已登录
+        function checkLoggedIn() {
+            const token = localStorage.getItem('jobTrackerToken') || sessionStorage.getItem('jobTrackerToken');
+            if (token) {
+                window.location.href = 'dashboard.html';
+            }
+        }
+
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', () => {
+            checkLoggedIn();
+            showRandomQuote();
+        });
+    </script>
+</body>
+</html>

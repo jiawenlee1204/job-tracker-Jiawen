@@ -1,0 +1,2027 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>求职记录管理 - 主页面</title>
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Tesseract.js for OCR -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.1.4/dist/tesseract.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#7DD3FC',
+                        secondary: '#FFD384',
+                        accent: '#FF9EAA',
+                        light: '#FFF5F5',
+                        dark: '#5D5D5D',
+                        success: '#8ED1B6',
+                        warning: '#FFD384',
+                        danger: '#FF9EAA',
+                        info: '#9DD6DF',
+                        cream: '#FFF9E6',
+                        apricot: '#FFE8D6',
+                        skyblue: '#87CEEB',
+                        warmwhite: '#FFFEF9'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'bounce-slow': 'bounce 3s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float-slow': 'float 8s ease-in-out infinite',
+                        'float-reverse': 'floatReverse 7s ease-in-out infinite',
+                        'wiggle': 'wiggle 2s ease-in-out infinite',
+                        'glow': 'glow 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        floatReverse: {
+                            '0%, 100%': { transform: 'translateY(-10px)' },
+                            '50%': { transform: 'translateY(0)' },
+                        },
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' },
+                        },
+                        glow: {
+                            '0%, 100%': { opacity: '0.6' },
+                            '50%': { opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .card-shadow {
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            }
+            .gradient-bg {
+                background: linear-gradient(135deg, #FFF5F5 0%, #FFF9E6 25%, #FFE8D6 50%, #FFE4E1 75%, #FFF0F5 100%);
+                position: relative;
+                overflow-x: hidden;
+            }
+            .gradient-bg::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-image: 
+                    radial-gradient(circle at 10% 20%, rgba(255, 182, 193, 0.15) 0%, transparent 50%),
+                    radial-gradient(circle at 90% 30%, rgba(255, 218, 185, 0.15) 0%, transparent 50%),
+                    radial-gradient(circle at 20% 80%, rgba(221, 160, 221, 0.12) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 70%, rgba(173, 216, 230, 0.12) 0%, transparent 50%),
+                    radial-gradient(circle at 50% 50%, rgba(255, 255, 224, 0.1) 0%, transparent 60%);
+                pointer-events: none;
+                z-index: 0;
+            }
+            .gradient-bg::after {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FFB6C1' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+                pointer-events: none;
+                z-index: 0;
+            }
+            .glass-effect {
+                background: rgba(255, 255, 255, 0.85);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+            }
+            .timeline-line {
+                position: absolute;
+                left: 0;
+                margin-left: 0.75rem;
+                margin-top: 1.25rem;
+                height: 100%;
+                width: 0.125rem;
+                background-color: #e5e7eb;
+            }
+            .timeline-dot {
+                position: absolute;
+                left: 0;
+                margin-left: 0.75rem;
+                margin-top: 1.25rem;
+                height: 1.5rem;
+                width: 1.5rem;
+                border-radius: 9999px;
+                border-width: 4px;
+                border-color: white;
+            }
+            .card-hover {
+                transition: transform 0.2s ease-out, box-shadow 0.3s ease-out;
+                transform-style: preserve-3d;
+                backface-visibility: hidden;
+            }
+            .card-hover:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 12px 30px -8px rgba(125, 211, 252, 0.25), 0 8px 16px -4px rgba(0, 0, 0, 0.08);
+                border-color: #7DD3FC;
+            }
+            .nav-item {
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .nav-item:hover {
+                background: rgba(125, 211, 252, 0.1);
+                transform: translateX(5px);
+            }
+            .nav-item.active {
+                background: rgba(125, 211, 252, 0.2);
+                border-left: 3px solid #7DD3FC;
+            }
+            .decorative-element {
+                position: fixed;
+                pointer-events: none;
+                z-index: 0;
+                transition: transform 0.1s ease-out;
+                will-change: transform;
+            }
+            .decorative-element:hover {
+                transform: scale(1.1) rotate(5deg);
+            }
+            .toast-enter {
+                animation: toastSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            }
+            .toast-exit {
+                animation: toastSlideOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            }
+            @keyframes toastSlideIn {
+                from {
+                    transform: translateY(20px) scale(0.9);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0) scale(1);
+                    opacity: 1;
+                }
+            }
+            @keyframes toastSlideOut {
+                from {
+                    transform: translateY(0) scale(1);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateY(20px) scale(0.9);
+                    opacity: 0;
+                }
+            }
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex flex-col relative overflow-x-hidden">
+    <!-- 左侧装饰元素 - 插花糖果屋风格 -->
+    <div class="decorative-element left-4 top-20 animate-float">
+        <svg width="70" height="70" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="8" fill="#FFB6C1" opacity="0.5"/>
+            <circle cx="35" cy="40" r="6" fill="#FFC0CB" opacity="0.4"/>
+            <circle cx="65" cy="40" r="6" fill="#FFC0CB" opacity="0.4"/>
+            <circle cx="50" cy="35" r="5" fill="#FFD700" opacity="0.5"/>
+            <path d="M50 55 Q45 65 50 75 Q55 65 50 55" fill="#98FB98" opacity="0.4"/>
+            <path d="M35 50 Q30 60 35 70 Q40 60 35 50" fill="#98FB98" opacity="0.35"/>
+            <path d="M65 50 Q60 60 65 70 Q70 60 65 50" fill="#98FB98" opacity="0.35"/>
+        </svg>
+    </div>
+    <div class="decorative-element left-8 top-96 animate-float-slow">
+        <svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,15 60,40 85,40 65,55 75,80 50,65 25,80 35,55 15,40 40,40" fill="#FFD700" opacity="0.3"/>
+            <circle cx="50" cy="45" r="12" fill="#FF69B4" opacity="0.4"/>
+        </svg>
+    </div>
+    <div class="decorative-element left-4 top-[600px] animate-wiggle">
+        <svg width="65" height="65" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="25" y="35" width="50" height="40" rx="5" fill="#FFB6C1" opacity="0.3"/>
+            <polygon points="50,15 75,35 25,35" fill="#FF69B4" opacity="0.35"/>
+            <rect x="42" y="50" width="16" height="25" fill="#FFF" opacity="0.5"/>
+            <circle cx="30" cy="55" r="4" fill="#87CEEB" opacity="0.4"/>
+            <circle cx="70" cy="55" r="4" fill="#87CEEB" opacity="0.4"/>
+        </svg>
+    </div>
+    <div class="decorative-element left-6 top-[800px] animate-float-reverse">
+        <svg width="55" height="55" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="50" cy="60" rx="25" ry="15" fill="#DDA0DD" opacity="0.35"/>
+            <circle cx="40" cy="50" r="7" fill="#FFB6C1" opacity="0.4"/>
+            <circle cx="60" cy="50" r="7" fill="#FFB6C1" opacity="0.4"/>
+            <circle cx="50" cy="42" r="6" fill="#FFD700" opacity="0.45"/>
+            <path d="M50 65 Q45 75 50 85 Q55 75 50 65" fill="#98FB98" opacity="0.3"/>
+        </svg>
+    </div>
+
+    <!-- 右侧装饰元素 - 插花糖果屋风格 -->
+    <div class="decorative-element right-6 top-32 animate-float-reverse">
+        <svg width="75" height="75" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="10" fill="#FFC0CB" opacity="0.45"/>
+            <circle cx="35" cy="38" r="7" fill="#FFB6C1" opacity="0.4"/>
+            <circle cx="65" cy="38" r="7" fill="#FFB6C1" opacity="0.4"/>
+            <circle cx="50" cy="32" r="6" fill="#FFD700" opacity="0.5"/>
+            <path d="M50 58 Q43 70 50 82 Q57 70 50 58" fill="#98FB98" opacity="0.35"/>
+            <path d="M35 48 Q28 58 35 68 Q42 58 35 48" fill="#98FB98" opacity="0.3"/>
+            <path d="M65 48 Q58 58 65 68 Q72 58 65 48" fill="#98FB98" opacity="0.3"/>
+        </svg>
+    </div>
+    <div class="decorative-element right-8 top-80 animate-float-slow">
+        <svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="30" y="40" width="40" height="35" rx="4" fill="#FFB6C1" opacity="0.3"/>
+            <polygon points="50,20 70,40 30,40" fill="#FF69B4" opacity="0.35"/>
+            <rect x="40" y="52" width="20" height="23" fill="#FFF" opacity="0.5"/>
+            <circle cx="38" cy="58" r="3" fill="#87CEEB" opacity="0.4"/>
+            <circle cx="62" cy="58" r="3" fill="#87CEEB" opacity="0.4"/>
+        </svg>
+    </div>
+    <div class="decorative-element right-4 top-[500px] animate-wiggle">
+        <svg width="70" height="70" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="50" cy="55" rx="30" ry="18" fill="#DDA0DD" opacity="0.3"/>
+            <circle cx="38" cy="45" r="8" fill="#FFC0CB" opacity="0.4"/>
+            <circle cx="62" cy="45" r="8" fill="#FFC0CB" opacity="0.4"/>
+            <circle cx="50" cy="38" r="7" fill="#FFD700" opacity="0.5"/>
+            <path d="M50 60 Q43 72 50 84 Q57 72 50 60" fill="#98FB98" opacity="0.35"/>
+        </svg>
+    </div>
+    <div class="decorative-element right-6 top-[750px] animate-float">
+        <svg width="50" height="50" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="8" fill="#FF69B4" opacity="0.4"/>
+            <circle cx="50" cy="50" r="5" fill="#FFD700" opacity="0.5"/>
+            <circle cx="50" cy="50" r="2" fill="#FFF" opacity="0.6"/>
+        </svg>
+    </div>
+    <div class="decorative-element right-4 top-[950px] animate-glow">
+        <svg width="45" height="45" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,10 58,35 85,35 63,52 72,78 50,62 28,78 37,52 15,35 42,35" fill="#FFD700" opacity="0.4"/>
+        </svg>
+    </div>
+    <!-- 顶部导航栏 -->
+    <header class="glass-effect sticky top-0 z-40 shadow-md border-b border-primary border-opacity-20">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex flex-wrap items-center justify-between">
+                <!-- 左侧 Logo 和标题 -->
+                <div class="flex items-center">
+                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/442ec9f5b0944f7bb543b131d6c57084~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260313000259224AE94A46A2D00FFBFA&rrcfp=f06b921b&x-expires=1775923442&x-signature=6dn3MGPS75myYfvxozWv3tDBGjo%3D" 
+                         alt="Logo" class="h-10 w-10 rounded-full mr-3 transition-transform duration-300 hover:scale-110 hover:rotate-12">
+                    <h1 class="text-xl font-bold text-gray-800">收offer啦！</h1>
+                </div>
+                
+                <!-- 右侧用户信息和操作 -->
+                <div class="flex items-center mt-3 sm:mt-0">
+                    <div class="mr-4 text-right hidden md:block">
+                        <p id="welcome-text" class="text-sm font-medium text-gray-700">欢迎回来</p>
+                        <p id="username-display" class="text-xs text-gray-500">用户</p>
+                    </div>
+                    
+                    <div class="relative">
+                        <button id="user-menu-button" class="flex items-center text-gray-700 hover:text-primary focus:outline-none transition-all duration-300 transform hover:scale-105">
+                            <div class="h-8 w-8 rounded-full bg-primary text-white flex items-center justify-center transition-all duration-300 hover:shadow-lg hover:shadow-primary hover:shadow-opacity-30">
+                                <span id="user-initial">U</span>
+                            </div>
+                            <i class="fa fa-chevron-down ml-2 text-xs transition-transform duration-300"></i>
+                        </button>
+                        
+                        <!-- 用户菜单下拉 -->
+                        <div id="user-menu" class="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-lg py-2 z-50 hidden transform transition-all duration-300 opacity-0 scale-95">
+                            <a href="#" id="update-quote" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-primary hover:bg-opacity-10 hover:text-primary transition-all duration-300 rounded-xl mx-1">
+                                <i class="fa fa-quote-left mr-2"></i>更新名言
+                            </a>
+                            <a href="#" id="export-data" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-primary hover:bg-opacity-10 hover:text-primary transition-all duration-300 rounded-xl mx-1">
+                                <i class="fa fa-download mr-2"></i>导出数据
+                            </a>
+                            <a href="#" id="logout-button" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-primary hover:bg-opacity-10 hover:text-primary transition-all duration-300 rounded-xl mx-1">
+                                <i class="fa fa-sign-out mr-2"></i>退出登录
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 名言/文学摘抄模块 -->
+    <div id="quote-container" class="fixed top-0 left-0 right-0 bg-white bg-opacity-95 p-5 transform -translate-y-full transition-transform duration-500 ease-in-out z-[100] shadow-lg border-b border-primary border-opacity-30">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <i class="fa fa-quote-left text-primary text-2xl mr-3"></i>
+                <div>
+                    <p id="quote-text" class="text-gray-700 italic">每一次挑战都是成长的机会，每一次拒绝都是向成功更近一步。</p>
+                    <p id="quote-author" class="text-sm text-gray-500 mt-1">— 匿名</p>
+                </div>
+            </div>
+            <button id="close-quote" class="text-gray-500 hover:text-primary transition-colors">
+                <i class="fa fa-times text-xl"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 主内容区 -->
+    <main class="flex-grow container mx-auto px-4 py-6 relative z-10">
+        <!-- 筛选和视图切换区 -->
+        <div class="bg-white rounded-2xl p-5 mb-6 border-2 border-transparent hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <!-- 筛选区 -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <div class="relative">
+                        <input type="text" id="search-input" placeholder="搜索公司或职位..." 
+                               class="pl-10 pr-4 py-2.5 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 hover:border-primary">
+                        <i class="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                    
+                    <select id="status-filter" class="px-4 py-2.5 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 hover:border-primary">
+                        <option value="all">所有状态</option>
+                        <option value="applied">已投递</option>
+                        <option value="笔试">笔试</option>
+                        <option value="一面">一面</option>
+                        <option value="二面">二面</option>
+                        <option value="三面">三面</option>
+                        <option value="offer">已获得Offer</option>
+                        <option value="rejected">已拒绝</option>
+                    </select>
+                    
+                    <select id="sort-by" class="px-4 py-2.5 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 hover:border-primary">
+                        <option value="date-desc">投递日期 (新→旧)</option>
+                        <option value="date-asc">投递日期 (旧→新)</option>
+                        <option value="company-asc">公司名称 (A→Z)</option>
+                        <option value="company-desc">公司名称 (Z→A)</option>
+                    </select>
+                </div>
+                
+                <!-- 视图切换区 -->
+                <div class="flex items-center">
+                    <button id="card-view-btn" class="px-4 py-2.5 bg-primary text-white rounded-l-2xl hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105">
+                        <i class="fa fa-th-large"></i>
+                    </button>
+                    <button id="timeline-view-btn" class="px-4 py-2.5 bg-gray-200 text-gray-700 rounded-r-2xl hover:bg-gray-300 transition-all duration-300 transform hover:scale-105">
+                        <i class="fa fa-list"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 记录统计卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white rounded-2xl p-5 card-hover border-2 border-transparent">
+                <div class="flex items-center">
+                    <div class="h-14 w-14 rounded-2xl bg-primary bg-opacity-20 flex items-center justify-center mr-4">
+                        <i class="fa fa-paper-plane text-primary text-2xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">已投递</p>
+                        <p id="total-applied" class="text-2xl font-bold text-gray-800">0</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-2xl p-5 card-hover border-2 border-transparent">
+                <div class="flex items-center">
+                    <div class="h-14 w-14 rounded-2xl bg-info bg-opacity-20 flex items-center justify-center mr-4">
+                        <i class="fa fa-comments text-info text-2xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">面试中</p>
+                        <p id="total-interviewing" class="text-2xl font-bold text-gray-800">0</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-2xl p-5 card-hover border-2 border-transparent">
+                <div class="flex items-center">
+                    <div class="h-14 w-14 rounded-2xl bg-success bg-opacity-20 flex items-center justify-center mr-4">
+                        <i class="fa fa-check-circle text-success text-2xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">已获得Offer</p>
+                        <p id="total-offers" class="text-2xl font-bold text-gray-800">0</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-2xl p-5 card-hover border-2 border-transparent">
+                <div class="flex items-center">
+                    <div class="h-14 w-14 rounded-2xl bg-danger bg-opacity-20 flex items-center justify-center mr-4">
+                        <i class="fa fa-times-circle text-danger text-2xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">已拒绝</p>
+                        <p id="total-rejected" class="text-2xl font-bold text-gray-800">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 添加记录按钮 -->
+        <div class="flex justify-center mb-6">
+            <button id="add-record-btn" class="px-6 py-3 bg-primary hover:bg-opacity-90 text-white font-medium rounded-full shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1 active:scale-[0.98] flex items-center">
+                <i class="fa fa-plus mr-2"></i> 添加求职记录
+            </button>
+        </div>
+        
+        <!-- 记录展示区 -->
+        <div id="records-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- 记录卡片将通过 JavaScript 动态生成 -->
+            <div id="no-records" class="col-span-full text-center py-12">
+                <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/231bc0cfeacd4b49b33202ef57be3b2d~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260313005558336295D4F522FB5CDB9C&rrcfp=f06b921b&x-expires=1775926579&x-signature=tZuxYIEqjImyQacKFDs9wXovZEE%3D" 
+                     alt="求职小熊" class="h-32 mx-auto mb-4 animate-float">
+                <p class="text-gray-500 text-lg">还没有求职记录，点击上方按钮添加第一条记录吧！</p>
+            </div>
+        </div>
+        
+        <!-- 时间轴视图 (默认隐藏) -->
+        <div id="timeline-container" class="hidden">
+            <!-- 时间轴记录将通过 JavaScript 动态生成 -->
+            <div id="no-timeline-records" class="text-center py-12">
+                <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/231bc0cfeacd4b49b33202ef57be3b2d~tplv-a9rns2rl98-image.image?lk3s=8e244e95&rcl=20260313005558336295D4F522FB5CDB9C&rrcfp=f06b921b&x-expires=1775926579&x-signature=tZuxYIEqjImyQacKFDs9wXovZEE%3D" 
+                     alt="求职小熊" class="h-32 mx-auto mb-4 animate-float">
+                <p class="text-gray-500 text-lg">还没有求职记录，点击上方按钮添加第一条记录吧！</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- 添加/编辑记录模态框 -->
+    <div id="record-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[150] hidden">
+        <div class="bg-white rounded-3xl p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0 border-2 border-transparent" id="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="modal-title" class="text-2xl font-bold text-gray-800">添加求职记录</h2>
+                <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fa fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form id="record-form" class="space-y-6">
+                <input type="hidden" id="record-id">
+                
+                <!-- 公司信息 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="company-name" class="block text-sm font-medium text-gray-700 mb-1">公司名称 <span class="text-danger">*</span></label>
+                        <div class="relative">
+                            <input type="text" id="company-name" name="company-name" 
+                                   class="w-full pl-4 pr-10 py-2.5 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 hover:border-primary"
+                                   placeholder="请输入公司名称" required>
+                            <span id="company-emoji" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-2xl">🏢</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="position-name" class="block text-sm font-medium text-gray-700 mb-1">职位名称 <span class="text-danger">*</span></label>
+                        <input type="text" id="position-name" name="position-name" 
+                               class="w-full px-4 py-2.5 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 hover:border-primary"
+                               placeholder="请输入职位名称" required>
+                    </div>
+                </div>
+                
+                <!-- 职位描述 -->
+                <div>
+                    <label for="position-desc" class="block text-sm font-medium text-gray-700 mb-1">职位描述</label>
+                    <textarea id="position-desc" name="position-desc" rows="3"
+                              class="w-full px-4 py-2.5 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 hover:border-primary"
+                              placeholder="请输入职位描述"></textarea>
+                </div>
+                
+                <!-- 投递日期 -->
+                <div>
+                    <label for="apply-date" class="block text-sm font-medium text-gray-700 mb-1">投递日期 <span class="text-danger">*</span></label>
+                    <input type="date" id="apply-date" name="apply-date" 
+                           class="w-full px-4 py-2.5 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 hover:border-primary"
+                           required>
+                </div>
+                
+                <!-- 面试阶段 -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">面试阶段</label>
+                    <div id="interview-stages" class="space-y-3">
+                        <!-- 面试阶段将通过 JavaScript 动态生成 -->
+                    </div>
+                    
+                    <button type="button" id="add-stage-btn" class="mt-2 px-4 py-2 bg-gray-100 hover:bg-primary hover:bg-opacity-20 hover:text-primary text-gray-700 rounded-2xl transition-all duration-300 transform hover:scale-105 flex items-center text-sm">
+                        <i class="fa fa-plus mr-1"></i> 添加面试阶段
+                    </button>
+                </div>
+                
+                <!-- 图片上传OCR解析 -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">图片上传 (OCR解析)</label>
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:border-primary transition-colors" id="drop-area">
+                        <input type="file" id="image-upload" accept="image/*" class="hidden">
+                        <i class="fa fa-cloud-upload text-3xl text-gray-400 mb-2"></i>
+                        <p class="text-sm text-gray-500">点击或拖拽图片到此处上传</p>
+                        <p class="text-xs text-gray-400 mt-1">支持 JPG, PNG 格式</p>
+                    </div>
+                    
+                    <div id="ocr-status" class="mt-2 hidden">
+                        <div class="flex items-center">
+                            <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-primary mr-2"></div>
+                            <p class="text-sm text-gray-600">正在解析图片，请稍候...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+                    <button type="button" id="cancel-record" 
+                            class="px-6 py-2.5 bg-gray-100 hover:bg-gray-200 hover:shadow-md text-gray-700 font-medium rounded-2xl transition-all duration-300 transform hover:scale-105">
+                        取消
+                    </button>
+                    <button type="submit" 
+                            class="px-6 py-2.5 bg-primary hover:bg-opacity-90 hover:shadow-lg hover:shadow-primary hover:shadow-opacity-30 text-white font-medium rounded-2xl transition-all duration-300 transform hover:scale-105">
+                        保存
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 确认删除模态框 -->
+    <div id="delete-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[150] hidden">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0 border-2 border-transparent" id="delete-modal-content">
+            <div class="text-center mb-6">
+                <div class="h-16 w-16 rounded-full bg-danger bg-opacity-20 flex items-center justify-center mx-auto mb-4">
+                    <i class="fa fa-trash text-danger text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">确认删除</h3>
+                <p class="text-gray-600 mt-2">您确定要删除这条求职记录吗？此操作无法撤销。</p>
+            </div>
+            
+            <div class="flex justify-center space-x-3">
+                <button id="cancel-delete" 
+                        class="px-6 py-2.5 bg-gray-100 hover:bg-gray-200 hover:shadow-md text-gray-700 font-medium rounded-2xl transition-all duration-300 hover:-translate-y-1">
+                    取消
+                </button>
+                <button id="confirm-delete" 
+                        class="px-6 py-2.5 bg-danger hover:bg-opacity-90 hover:shadow-lg hover:shadow-danger hover:shadow-opacity-30 text-white font-medium rounded-2xl transition-all duration-300 hover:-translate-y-1">
+                    确认删除
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提示消息 -->
+    <div id="toast" class="fixed bottom-4 right-4 bg-white rounded-2xl shadow-lg p-4 transform translate-y-20 opacity-0 transition-all duration-300 flex items-center z-[200] border-2 border-primary border-opacity-20">
+        <div id="toast-icon" class="mr-3 text-xl"></div>
+        <div id="toast-message" class="text-gray-700"></div>
+    </div>
+
+    <!-- 加载动画 -->
+    <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-[200] hidden">
+        <div class="bg-white rounded-xl p-6 flex flex-col items-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+            <p id="loading-text" class="text-gray-700">加载中，请稍候...</p>
+        </div>
+    </div>
+
+    <script>
+        // 激励名言数据
+        const motivationalQuotes = [
+            { text: "每一次挑战都是成长的机会，每一次拒绝都是向成功更近一步。", author: "— 匿名" },
+            { text: "不要害怕失败，因为失败是成功的一部分。", author: "— 迈克尔·乔丹" },
+            { text: "成功不是终点，失败也不是末日，最重要的是继续前进的勇气。", author: "— 温斯顿·丘吉尔" },
+            { text: "你的时间有限，不要浪费在别人的生活里。", author: "— 史蒂夫·乔布斯" },
+            { text: "生活不是等待暴风雨过去，而是学会在雨中跳舞。", author: "— 维维安·格林" },
+            { text: "耐心是一种美德，也是成功的关键。", author: "— 匿名" },
+            { text: "每一个伟大的梦想都始于一个勇敢的开始。", author: "— 匿名" },
+            { text: "困难只是暂时的，坚持下去，你会感谢今天努力的自己。", author: "— 匿名" },
+            { text: "成功的秘诀在于始终如一地坚持目标。", author: "— 匿名" },
+            { text: "每一次面试都是一次学习的机会，无论结果如何。", author: "— 匿名" },
+            { text: "机会总是留给有准备的人。", author: "— 路易斯·巴斯德" },
+            { text: "天才是百分之一的灵感加百分之九十九的汗水。", author: "— 托马斯·爱迪生" },
+            { text: "如果你想实现梦想，就先从梦中醒来。", author: "— 保罗·科埃略" },
+            { text: "成功的人总是在寻找机会，失败的人总是在寻找借口。", author: "— 匿名" },
+            { text: "人生最大的遗憾不是失败，而是我本可以。", author: "— 匿名" }
+        ];
+
+        // 公司名称对应的emoji
+        const companyEmojis = {
+            '阿里巴巴': '🏢', '腾讯': '🐧', '百度': '🔍', '字节跳动': '📱', '美团': '🍔',
+            '京东': '📦', '小米': '📱', '华为': '📱', '网易': '🎮', '滴滴': '🚕',
+            '拼多多': '💰', '蚂蚁金服': '💳', '菜鸟': '📦', '阿里云': '☁️', '腾讯云': '☁️',
+            '百度云': '☁️', '华为云': '☁️', '京东云': '☁️', '美团云': '☁️', '网易云': '☁️',
+            '新浪': '🌊', '搜狐': '🐺', '优酷': '🎬', '爱奇艺': '🎬', '腾讯视频': '🎬',
+            'B站': '📺', '小红书': '📖', '知乎': '❓', '豆瓣': '📚', '快手': '📱',
+            '抖音': '🎵', '微视': '🎵', '淘宝': '🛒', '天猫': '🛒', '闲鱼': '🐟',
+            '转转': '🔄', '瓜子': '🚗', '优信': '🚗', '弹个车': '🚗', '毛豆新车': '🚗',
+            '特斯拉': '🚗', '蔚来': '🚗', '小鹏': '🚗', '理想': '🚗', '威马': '🚗',
+            '百度地图': '🗺️', '高德地图': '🗺️', '腾讯地图': '🗺️', '滴滴出行': '🚕', '曹操出行': '🚕',
+            '首汽约车': '🚕', '神州专车': '🚕', '美团打车': '🚕', '高德打车': '🚕', '哈啰出行': '🚲',
+            'ofo': '🚲', '摩拜': '🚲', '青桔': '🚲', '小蓝': '🚲', '松果': '🚲',
+            '星巴克': '☕', '瑞幸咖啡': '☕', '喜茶': '🥤', '奈雪的茶': '🥤', '一点点': '🥤',
+            'CoCo': '🥤', '蜜雪冰城': '🥤', '茶百道': '🥤', '古茗': '🥤', '书亦烧仙草': '🥤',
+            '肯德基': '🍗', '麦当劳': '🍔', '汉堡王': '🍔', '德克士': '🍗', '华莱士': '🍗',
+            '必胜客': '🍕', '达美乐': '🍕', '棒约翰': '🍕', '小肥羊': '🍲', '海底捞': '🍲',
+            '呷哺呷哺': '🍲', '张亮麻辣烫': '🌶️', '杨国福麻辣烫': '🌶️', '绝味鸭脖': '🌶️', '周黑鸭': '🌶️',
+            '良品铺子': '🍪', '三只松鼠': '🐿️', '百草味': '🌿', '来伊份': '🍽️', '洽洽': '🥜',
+            '伊利': '🥛', '蒙牛': '🥛', '光明': '🥛', '三元': '🥛', '完达山': '🥛',
+            '农夫山泉': '💧', '怡宝': '💧', '娃哈哈': '💧', '康师傅': '🍜', '统一': '🍜',
+            '今麦郎': '🍜', '白象': '🍜', '日清': '🍜', '公仔面': '🍜', '出前一丁': '🍜',
+            '宝洁': '🧴', '联合利华': '🧴', '欧莱雅': '💄', '雅诗兰黛': '💄', '兰蔻': '💄',
+            '资生堂': '💄', 'SK-II': '💄', '迪奥': '💄', '香奈儿': '💄', '古驰': '👜',
+            'LV': '👜', '爱马仕': '👜', '普拉达': '👜', '芬迪': '👜', '巴宝莉': '👜',
+            '耐克': '👟', '阿迪达斯': '👟', '彪马': '👟', '安踏': '👟', '李宁': '👟',
+            '特步': '👟', '361度': '👟', '匹克': '👟', '鸿星尔克': '👟', '贵人鸟': '👟',
+            '小米': '📱', '华为': '📱', '苹果': '🍎', '三星': '📱', 'OPPO': '📱',
+            'vivo': '📱', '魅族': '📱', '一加': '📱', '努比亚': '📱', 'realme': '📱',
+            '联想': '💻', '华硕': '💻', '戴尔': '💻', '惠普': '💻', '宏碁': '💻',
+            '微软': '🖥️', '英特尔': '💻', 'AMD': '💻', '英伟达': '💻', '高通': '📱',
+            '联发科': '📱', '海思': '📱', '紫光展锐': '📱', '中芯国际': '💻', '台积电': '💻',
+            '三星电子': '📱', 'LG电子': '📱', '索尼': '📷', '松下': '📷', '夏普': '📺',
+            '东芝': '💻', '日立': '💻', 'nec': '💻', '富士通': '💻', '佳能': '📷',
+            '尼康': '📷', '宾得': '📷', '奥林巴斯': '📷', '卡西欧': '⌚', '精工': '⌚',
+            '西铁城': '⌚', '劳力士': '⌚', '欧米茄': '⌚', '万国': '⌚', '卡地亚': '⌚',
+            '百达翡丽': '⌚', '江诗丹顿': '⌚', '爱彼': '⌚', '宝玑': '⌚', '积家': '⌚',
+            '法国航空': '✈️', '德国汉莎航空': '✈️', '英国航空': '✈️', '美国航空': '✈️', '美联航': '✈️',
+            '达美航空': '✈️', '西南航空': '✈️', '日本航空': '✈️', '全日空': '✈️', '大韩航空': '✈️',
+            '韩亚航空': '✈️', '新加坡航空': '✈️', '国泰航空': '✈️', '港龙航空': '✈️', '澳门航空': '✈️',
+            '台湾长荣航空': '✈️', '中华航空': '✈️', '海南航空': '✈️', '中国国航': '✈️', '东方航空': '✈️',
+            '南方航空': '✈️', '深圳航空': '✈️', '厦门航空': '✈️', '四川航空': '✈️', '山东航空': '✈️',
+            '春秋航空': '✈️', '吉祥航空': '✈️', '华夏航空': '✈️', '奥凯航空': '✈️', '瑞丽航空': '✈️',
+            '长龙航空': '✈️', '成都航空': '✈️', '河北航空': '✈️', '天津航空': '✈️', '重庆航空': '✈️',
+            '西藏航空': '✈️', '北部湾航空': '✈️', '乌鲁木齐航空': '✈️', '青岛航空': '✈️', '贵州航空': '✈️',
+            '桂林航空': '✈️', '龙江航空': '✈️', '长安航空': '✈️', '江西航空': '✈️', '红土航空': '✈️',
+            '多彩贵州航空': '✈️', '幸福航空': '✈️', '昆明航空': '✈️', '兰州航空': '✈️', '宁夏航空': '✈️',
+            '内蒙古航空': '✈️', '大连航空': '✈️', '南京航空': '✈️', '杭州航空': '✈️', '宁波航空': '✈️',
+            '厦门航空': '✈️', '青岛航空': '✈️', '深圳航空': '✈️', '珠海航空': '✈️', '三亚航空': '✈️',
+            '海口航空': '✈️', '福州航空': '✈️', '南昌航空': '✈️', '长沙航空': '✈️', '武汉航空': '✈️',
+            '郑州航空': '✈️', '西安航空': '✈️', '太原航空': '✈️', '济南航空': '✈️', '合肥航空': '✈️',
+            '南宁航空': '✈️', '西宁航空': '✈️', '银川航空': '✈️', '拉萨航空': '✈️', '哈尔滨航空': '✈️',
+            '长春航空': '✈️', '沈阳航空': '✈️', '呼和浩特航空': '✈️', '乌鲁木齐航空': '✈️', '兰州航空': '✈️',
+            '西宁航空': '✈️', '银川航空': '✈️', '拉萨航空': '✈️', '香港航空': '✈️', '澳门航空': '✈️',
+            '台湾长荣航空': '✈️', '中华航空': '✈️'
+        };
+
+        // 面试阶段类型
+        const stageTypes = ['笔试', '一面', '二面', '三面', 'HR面', '终面', '已获得Offer', '已拒绝'];
+
+        // 状态颜色映射
+        const statusColors = {
+            '已通过': 'bg-success text-white',
+            '未通过': 'bg-danger text-white',
+            '待反馈': 'bg-warning text-white',
+            '已获得Offer': 'bg-success text-white',
+            '已拒绝': 'bg-danger text-white'
+        };
+
+        // DOM 元素
+        const quoteContainer = document.getElementById('quote-container');
+        const quoteText = document.getElementById('quote-text');
+        const quoteAuthor = document.getElementById('quote-author');
+        const closeQuote = document.getElementById('close-quote');
+        const userMenuButton = document.getElementById('user-menu-button');
+        const userMenu = document.getElementById('user-menu');
+        const usernameDisplay = document.getElementById('username-display');
+        const userInitial = document.getElementById('user-initial');
+        const updateQuoteBtn = document.getElementById('update-quote');
+        const exportDataBtn = document.getElementById('export-data');
+        const logoutButton = document.getElementById('logout-button');
+        const searchInput = document.getElementById('search-input');
+        const statusFilter = document.getElementById('status-filter');
+        const sortBy = document.getElementById('sort-by');
+        const cardViewBtn = document.getElementById('card-view-btn');
+        const timelineViewBtn = document.getElementById('timeline-view-btn');
+        const recordsContainer = document.getElementById('records-container');
+        const timelineContainer = document.getElementById('timeline-container');
+        const noRecords = document.getElementById('no-records');
+        const noTimelineRecords = document.getElementById('no-timeline-records');
+        const addRecordBtn = document.getElementById('add-record-btn');
+        const recordModal = document.getElementById('record-modal');
+        const modalContent = document.getElementById('modal-content');
+        const modalTitle = document.getElementById('modal-title');
+        const closeModal = document.getElementById('close-modal');
+        const cancelRecord = document.getElementById('cancel-record');
+        const recordForm = document.getElementById('record-form');
+        const recordId = document.getElementById('record-id');
+        const companyName = document.getElementById('company-name');
+        const companyEmoji = document.getElementById('company-emoji');
+        const positionName = document.getElementById('position-name');
+        const positionDesc = document.getElementById('position-desc');
+        const applyDate = document.getElementById('apply-date');
+        const interviewStages = document.getElementById('interview-stages');
+        const addStageBtn = document.getElementById('add-stage-btn');
+        const dropArea = document.getElementById('drop-area');
+        const imageUpload = document.getElementById('image-upload');
+        const ocrStatus = document.getElementById('ocr-status');
+        const deleteModal = document.getElementById('delete-modal');
+        const deleteModalContent = document.getElementById('delete-modal-content');
+        const cancelDelete = document.getElementById('cancel-delete');
+        const confirmDelete = document.getElementById('confirm-delete');
+        const toast = document.getElementById('toast');
+        const toastIcon = document.getElementById('toast-icon');
+        const toastMessage = document.getElementById('toast-message');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const loadingText = document.getElementById('loading-text');
+        const totalApplied = document.getElementById('total-applied');
+        const totalInterviewing = document.getElementById('total-interviewing');
+        const totalOffers = document.getElementById('total-offers');
+        const totalRejected = document.getElementById('total-rejected');
+
+        // 全局变量
+        let records = [];
+        let filteredRecords = [];
+        let currentView = 'card';
+        let recordToDelete = null;
+        let editingRecordId = null;
+
+        // 显示随机名言
+        function showRandomQuote() {
+            const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+            quoteText.textContent = randomQuote.text;
+            quoteAuthor.textContent = randomQuote.author;
+            
+            // 恢复 pointer-events，确保可以点击
+            quoteContainer.style.pointerEvents = 'auto';
+            
+            // 显示名言模块
+            quoteContainer.classList.remove('-translate-y-full');
+        }
+
+        // 关闭名言模块
+        closeQuote.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            quoteContainer.classList.add('-translate-y-full');
+            
+            // 确保关闭后不会干扰其他元素的点击
+            setTimeout(() => {
+                quoteContainer.style.pointerEvents = 'none';
+            }, 500);
+        });
+
+        // 显示提示消息
+        function showToast(message, isSuccess = true) {
+            toastMessage.textContent = message;
+            toastIcon.className = `mr-3 text-xl ${isSuccess ? 'text-success' : 'text-danger'}`;
+            toastIcon.innerHTML = isSuccess ? '<i class="fa fa-check-circle"></i>' : '<i class="fa fa-exclamation-circle"></i>';
+            
+            toast.classList.remove('translate-y-20', 'opacity-0', 'toast-exit');
+            toast.classList.add('toast-enter');
+            
+            setTimeout(() => {
+                toast.classList.remove('toast-enter');
+                toast.classList.add('toast-exit');
+                setTimeout(() => {
+                    toast.classList.remove('toast-exit');
+                    toast.classList.add('translate-y-20', 'opacity-0');
+                }, 300);
+            }, 3000);
+        }
+
+        // 显示加载动画
+        function showLoading(text = '加载中，请稍候...') {
+            loadingText.textContent = text;
+            loadingOverlay.classList.remove('hidden');
+        }
+
+        // 隐藏加载动画
+        function hideLoading() {
+            loadingOverlay.classList.add('hidden');
+        }
+
+        // 切换用户菜单
+        userMenuButton.addEventListener('click', () => {
+            const isHidden = userMenu.classList.contains('hidden');
+            const chevronIcon = userMenuButton.querySelector('.fa-chevron-down');
+            
+            if (isHidden) {
+                userMenu.classList.remove('hidden');
+                chevronIcon.style.transform = 'rotate(180deg)';
+                setTimeout(() => {
+                    userMenu.classList.remove('opacity-0', 'scale-95');
+                    userMenu.classList.add('opacity-100', 'scale-100');
+                }, 10);
+            } else {
+                userMenu.classList.remove('opacity-100', 'scale-100');
+                userMenu.classList.add('opacity-0', 'scale-95');
+                chevronIcon.style.transform = 'rotate(0deg)';
+                setTimeout(() => {
+                    userMenu.classList.add('hidden');
+                }, 300);
+            }
+        });
+
+        // 点击页面其他地方关闭用户菜单
+        document.addEventListener('click', (e) => {
+            // 如果点击的是名言容器或其内部元素，不处理
+            if (quoteContainer.contains(e.target)) {
+                return;
+            }
+            
+            // 如果点击的是删除模态框或其内部元素，不处理
+            if (deleteModal.contains(e.target)) {
+                return;
+            }
+            
+            // 如果点击的是记录模态框或其内部元素，不处理
+            if (recordModal.contains(e.target)) {
+                return;
+            }
+            
+            if (!userMenuButton.contains(e.target) && !userMenu.contains(e.target)) {
+                if (!userMenu.classList.contains('hidden')) {
+                    const chevronIcon = userMenuButton.querySelector('.fa-chevron-down');
+                    userMenu.classList.remove('opacity-100', 'scale-100');
+                    userMenu.classList.add('opacity-0', 'scale-95');
+                    chevronIcon.style.transform = 'rotate(0deg)';
+                    setTimeout(() => {
+                        userMenu.classList.add('hidden');
+                    }, 300);
+                }
+            }
+        });
+
+        // 更新名言
+        updateQuoteBtn.addEventListener('click', () => {
+            userMenu.classList.add('hidden');
+            showRandomQuote();
+        });
+
+        // 导出数据
+        exportDataBtn.addEventListener('click', () => {
+            userMenu.classList.add('hidden');
+            
+            if (records.length === 0) {
+                showToast('没有数据可导出', false);
+                return;
+            }
+            
+            const user = getCurrentUser();
+            const dataStr = JSON.stringify(records, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `求职记录_${user.username}_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            showToast('数据导出成功');
+        });
+
+        // 退出登录
+        logoutButton.addEventListener('click', () => {
+            userMenu.classList.add('hidden');
+            localStorage.removeItem('jobTrackerToken');
+            localStorage.removeItem('jobTrackerUser');
+            sessionStorage.removeItem('jobTrackerToken');
+            sessionStorage.removeItem('jobTrackerUser');
+            window.location.href = 'index.html';
+        });
+
+        // 获取认证token
+        function getAuthToken() {
+            return localStorage.getItem('jobTrackerToken') || sessionStorage.getItem('jobTrackerToken');
+        }
+
+        // 获取当前用户信息
+        function getCurrentUser() {
+            const userStr = localStorage.getItem('jobTrackerUser') || sessionStorage.getItem('jobTrackerUser');
+            return userStr ? JSON.parse(userStr) : null;
+        }
+
+        // 检查用户登录状态
+        async function checkLoggedIn() {
+            const token = getAuthToken();
+            const user = getCurrentUser();
+            
+            if (!token || !user) {
+                window.location.href = 'index.html';
+                return false;
+            }
+            
+            // 更新用户信息显示
+            usernameDisplay.textContent = user.username;
+            userInitial.textContent = user.username.charAt(0).toUpperCase();
+            
+            return true;
+        }
+
+        // 从后端加载用户数据
+        async function loadUserData() {
+            if (!checkLoggedIn()) return;
+            
+            showLoading('加载数据中...');
+            
+            try {
+                const token = getAuthToken();
+                const response = await fetch('/api/records', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    records = data;
+                    filteredRecords = [...records];
+                    
+                    // 应用当前筛选和排序
+                    applyFiltersAndSort();
+                    
+                    updateStatistics();
+                    updateRecordsDisplay();
+                    
+                    hideLoading();
+                    showRandomQuote();
+                } else {
+                    showToast('加载数据失败，请重新登录', false);
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+                }
+            } catch (error) {
+                console.error('Load data error:', error);
+                showToast('网络错误，请稍后重试', false);
+                hideLoading();
+            }
+        }
+
+        // 更新统计数据
+        function updateStatistics() {
+            const applied = records.length;
+            const interviewing = records.filter(record => {
+                const lastStage = getLastStage(record);
+                return lastStage && !['已获得Offer', '已拒绝'].includes(lastStage.type);
+            }).length;
+            const offers = records.filter(record => {
+                const lastStage = getLastStage(record);
+                return lastStage && lastStage.type === '已获得Offer';
+            }).length;
+            const rejected = records.filter(record => {
+                const lastStage = getLastStage(record);
+                return lastStage && lastStage.type === '已拒绝';
+            }).length;
+            
+            totalApplied.textContent = applied;
+            totalInterviewing.textContent = interviewing;
+            totalOffers.textContent = offers;
+            totalRejected.textContent = rejected;
+        }
+
+        // 获取记录的最后一个面试阶段
+        function getLastStage(record) {
+            if (!record.stages || record.stages.length === 0) return null;
+            return record.stages[record.stages.length - 1];
+        }
+
+        // 获取记录的当前状态
+        function getRecordStatus(record) {
+            const lastStage = getLastStage(record);
+            if (!lastStage) return '已投递';
+            return lastStage.type;
+        }
+
+        // 应用筛选和排序
+        function applyFiltersAndSort() {
+            // 应用搜索筛选
+            const searchTerm = searchInput.value.toLowerCase();
+            filteredRecords = records.filter(record => {
+                return record.company.toLowerCase().includes(searchTerm) || 
+                       record.position.toLowerCase().includes(searchTerm);
+            });
+            
+            // 应用状态筛选
+            const statusValue = statusFilter.value;
+            if (statusValue !== 'all') {
+                filteredRecords = filteredRecords.filter(record => {
+                    const status = getRecordStatus(record);
+                    return status === statusValue;
+                });
+            }
+            
+            // 应用排序
+            const sortValue = sortBy.value;
+            filteredRecords.sort((a, b) => {
+                switch (sortValue) {
+                    case 'date-desc':
+                        return new Date(b.date) - new Date(a.date);
+                    case 'date-asc':
+                          return new Date(a.date) - new Date(b.date);
+                    case 'company-asc':
+                        return a.company.localeCompare(b.company);
+                    case 'company-desc':
+                        return b.company.localeCompare(a.company);
+                    default:
+                        return 0;
+                }
+            });
+            
+            updateRecordsDisplay();
+        }
+
+        // 更新记录显示
+        function updateRecordsDisplay() {
+            if (currentView === 'card') {
+                renderCardView();
+            } else {
+                renderTimelineView();
+            }
+        }
+
+        // 渲染卡片视图
+        function renderCardView() {
+            recordsContainer.innerHTML = '';
+            
+            if (filteredRecords.length === 0) {
+                recordsContainer.appendChild(noRecords);
+                return;
+            }
+            
+            filteredRecords.forEach(record => {
+                const card = createRecordCard(record);
+                recordsContainer.appendChild(card);
+            });
+        }
+
+        // 创建记录卡片
+        function createRecordCard(record) {
+            const status = getRecordStatus(record);
+            const statusClass = getStatusClass(status);
+            
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-2xl shadow-md overflow-hidden card-hover border-2 border-transparent';
+            card.dataset.id = record.id;
+            
+            // 构建面试阶段HTML
+            let stagesHtml = '';
+            if (record.stages && record.stages.length > 0) {
+                stagesHtml = record.stages.map(stage => {
+                    const stageStatusClass = statusColors[stage.status] || 'bg-gray-200 text-gray-700';
+                    return `
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-sm">${stage.type}</span>
+                            <span class="text-xs px-2 py-0.5 rounded-full ${stageStatusClass}">${stage.status}</span>
+                        </div>
+                        <div class="text-xs text-gray-500 mb-2">${stage.date}</div>
+                        ${stage.notes ? `<div class="text-xs text-gray-600 bg-gray-50 p-2 rounded mb-2">${stage.notes}</div>` : ''}
+                    `;
+                }).join('');
+            }
+            
+            card.innerHTML = `
+                <div class="p-5">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="flex items-center">
+                            <span class="text-3xl mr-3">${record.emoji || '🏢'}</span>
+                            <div>
+                                <h3 class="font-bold text-gray-800">${record.company}</h3>
+                                <p class="text-sm text-gray-600">${record.position}</p>
+                            </div>
+                        </div>
+                        <span class="px-2 py-1 text-xs font-medium rounded-full ${statusClass}">${status}</span>
+                    </div>
+                    
+                    <div class="text-sm text-gray-500 mb-3">
+                        <i class="fa fa-calendar-o mr-1"></i> 投递日期: ${record.date}
+                    </div>
+                    
+                    ${record.notes ? `
+                        <div class="text-sm text-gray-600 mb-3 line-clamp-2">
+                            ${record.notes}
+                        </div>
+                    ` : ''}
+                    
+                    ${record.stages && record.stages.length > 0 ? `
+                        <div class="mt-4 pt-3 border-t border-gray-100">
+                            <h4 class="text-sm font-medium text-gray-700 mb-2">面试阶段</h4>
+                            ${stagesHtml}
+                        </div>
+                    ` : ''}
+                    
+                    <div class="flex justify-end space-x-2 mt-4 pt-3 border-t border-gray-100">
+                        <button class="edit-record px-2 py-1 text-xs text-gray-600 hover:text-primary transition-colors">
+                            <i class="fa fa-pencil"></i> 编辑
+                        </button>
+                        <button class="delete-record px-2 py-1 text-xs text-gray-600 hover:text-danger transition-colors">
+                            <i class="fa fa-trash"></i> 删除
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // 添加事件监听器
+            card.querySelector('.edit-record').addEventListener('click', () => {
+                editRecord(record.id);
+            });
+            
+            card.querySelector('.delete-record').addEventListener('click', () => {
+                confirmDeleteRecord(record.id);
+            });
+            
+            return card;
+        }
+
+        // 渲染时间轴视图
+        function renderTimelineView() {
+            timelineContainer.innerHTML = '';
+            
+            if (filteredRecords.length === 0) {
+                timelineContainer.appendChild(noTimelineRecords);
+                return;
+            }
+            
+            // 按日期分组
+            const recordsByDate = {};
+            filteredRecords.forEach(record => {
+                const date = record.date;
+                if (!recordsByDate[date]) {
+                    recordsByDate[date] = [];
+                }
+                recordsByDate[date].push(record);
+            });
+            
+            // 按日期排序
+            const sortedDates = Object.keys(recordsByDate).sort((a, b) => new Date(b) - new Date(a));
+            
+            // 创建时间轴
+            const timeline = document.createElement('div');
+            timeline.className = 'relative pl-10';
+            
+            sortedDates.forEach((date, index) => {
+                const dateGroup = recordsByDate[date];
+                
+                // 日期标题
+                const dateHeader = document.createElement('div');
+                dateHeader.className = 'mb-6';
+                dateHeader.innerHTML = `
+                    <div class="timeline-dot bg-primary"></div>
+                    <div class="timeline-line ${index === sortedDates.length - 1 ? 'hidden' : ''}"></div>
+                    <div class="ml-8 -mt-6 mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">${formatDate(date)}</h3>
+                        <p class="text-sm text-gray-500">${dateGroup.length} 条记录</p>
+                    </div>
+                `;
+                timeline.appendChild(dateHeader);
+                
+                // 记录卡片
+                dateGroup.forEach(record => {
+                    const status = getRecordStatus(record);
+                    const statusClass = getStatusClass(status);
+                    
+                    const card = document.createElement('div');
+                    card.className = 'ml-8 mb-6 bg-white rounded-xl shadow-md overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-lg';
+                    card.dataset.id = record.id;
+                    
+                    // 构建面试阶段HTML
+                    let stagesHtml = '';
+                    if (record.stages && record.stages.length > 0) {
+                        stagesHtml = record.stages.map(stage => {
+                            const stageStatusClass = statusColors[stage.status] || 'bg-gray-200 text-gray-700';
+                            return `
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-sm">${stage.type}</span>
+                                    <span class="text-xs px-2 py-0.5 rounded-full ${stageStatusClass}">${stage.status}</span>
+                                </div>
+                                <div class="text-xs text-gray-500 mb-2">${stage.date}</div>
+                                ${stage.notes ? `<div class="text-xs text-gray-600 bg-gray-50 p-2 rounded mb-2">${stage.notes}</div>` : ''}
+                            `;
+                        }).join('');
+                    }
+                    
+                    card.innerHTML = `
+                        <div class="p-5">
+                            <div class="flex justify-between items-start mb-3">
+                                <div class="flex items-center">
+                                    <span class="text-3xl mr-3">${record.emoji || '🏢'}</span>
+                                    <div>
+                                        <h3 class="font-bold text-gray-800">${record.company}</h3>
+                                        <p class="text-sm text-gray-600">${record.position}</p>
+                                    </div>
+                                </div>
+                                <span class="px-2 py-1 text-xs font-medium rounded-full ${statusClass}">${status}</span>
+                            </div>
+                            
+                            ${record.notes ? `
+                                <div class="text-sm text-gray-600 mb-3 line-clamp-2">
+                                    ${record.notes}
+                                </div>
+                            ` : ''}
+                            
+                            ${record.stages && record.stages.length > 0 ? `
+                                <div class="mt-4 pt-3 border-t border-gray-100">
+                                    <h4 class="text-sm font-medium text-gray-700 mb-2">面试阶段</h4>
+                                    ${stagesHtml}
+                                </div>
+                            ` : ''}
+                            
+                            <div class="flex justify-end space-x-2 mt-4 pt-3 border-t border-gray-100">
+                                <button class="edit-record px-2 py-1 text-xs text-gray-600 hover:text-primary transition-colors">
+                                    <i class="fa fa-pencil"></i> 编辑
+                                </button>
+                                <button class="delete-record px-2 py-1 text-xs text-gray-600 hover:text-danger transition-colors">
+                                    <i class="fa fa-trash"></i> 删除
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // 添加事件监听器
+                    card.querySelector('.edit-record').addEventListener('click', () => {
+                        editRecord(record.id);
+                    });
+                    
+                    card.querySelector('.delete-record').addEventListener('click', () => {
+                        confirmDeleteRecord(record.id);
+                    });
+                    
+                    timeline.appendChild(card);
+                });
+            });
+            
+            timelineContainer.appendChild(timeline);
+        }
+
+        // 获取状态对应的样式类
+        function getStatusClass(status) {
+            switch (status) {
+                case '已投递':
+                    return 'bg-info text-white';
+                case '笔试':
+                case '一面':
+                case '二面':
+                case '三面':
+                case 'HR面':
+                case '终面':
+                    return 'bg-warning text-white';
+                case '已获得Offer':
+                    return 'bg-success text-white';
+                case '已拒绝':
+                    return 'bg-danger text-white';
+                default:
+                    return 'bg-gray-200 text-gray-700';
+            }
+        }
+
+        // 格式化日期
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            
+            // 获取星期几
+            const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+            const weekday = weekdays[date.getDay()];
+            
+            return `${year}年${month}月${day}日 星期${weekday}`;
+        }
+
+        // 打开添加记录模态框
+        addRecordBtn.addEventListener('click', () => {
+            modalTitle.textContent = '添加求职记录';
+            recordForm.reset();
+            recordId.value = '';
+            editingRecordId = null;
+            
+            // 设置默认日期为今天
+            const today = new Date().toISOString().split('T')[0];
+            applyDate.value = today;
+            
+            // 清空面试阶段
+            interviewStages.innerHTML = '';
+            
+            // 显示模态框
+            recordModal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        });
+
+        // 关闭记录模态框
+        function closeRecordModal() {
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                recordModal.classList.add('hidden');
+            }, 300);
+        }
+
+        closeModal.addEventListener('click', closeRecordModal);
+        cancelRecord.addEventListener('click', closeRecordModal);
+
+        // 点击模态框外部关闭
+        recordModal.addEventListener('click', (e) => {
+            if (e.target === recordModal) {
+                closeRecordModal();
+            }
+        });
+
+        // 添加面试阶段
+        addStageBtn.addEventListener('click', () => {
+            addInterviewStage();
+        });
+
+        // 添加面试阶段
+        function addInterviewStage(stageData = null) {
+            const stageIndex = interviewStages.children.length;
+            const stage = document.createElement('div');
+            stage.className = 'interview-stage bg-gray-50 p-3 rounded-lg';
+            
+            // 生成阶段类型选项
+            let typeOptions = '';
+            stageTypes.forEach(type => {
+                const selected = stageData && stageData.type === type ? 'selected' : '';
+                typeOptions += `<option value="${type}" ${selected}>${type}</option>`;
+            });
+            
+            // 生成状态选项
+            let statusOptions = '';
+            ['待反馈', '已通过', '未通过'].forEach(status => {
+                const selected = stageData && stageData.status === status ? 'selected' : '';
+                statusOptions += `<option value="${status}" ${selected}>${status}</option>`;
+            });
+            
+            stage.innerHTML = `
+                <div class="flex justify-between items-center mb-2">
+                    <h4 class="text-sm font-medium text-gray-700">阶段 ${stageIndex + 1}</h4>
+                    <button type="button" class="remove-stage text-xs text-gray-500 hover:text-danger transition-colors">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-2">
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">类型</label>
+                        <select class="stage-type w-full px-3 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary transition-colors">
+                            ${typeOptions}
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">日期</label>
+                        <input type="date" class="stage-date w-full px-3 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary transition-colors" value="${stageData ? stageData.date : new Date().toISOString().split('T')[0]}">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs text-gray-600 mb-1">状态</label>
+                        <select class="stage-status w-full px-3 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary transition-colors">
+                            ${statusOptions}
+                        </select>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-xs text-gray-600 mb-1">面试问题和复盘</label>
+                    <textarea class="stage-notes w-full px-3 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary transition-colors" rows="2" placeholder="记录面试问题和复盘内容...">${stageData ? stageData.notes : ''}</textarea>
+                </div>
+            `;
+            
+            // 添加删除按钮事件
+            stage.querySelector('.remove-stage').addEventListener('click', () => {
+                stage.remove();
+                updateStageNumbers();
+            });
+            
+            interviewStages.appendChild(stage);
+        }
+
+        // 更新阶段编号
+        function updateStageNumbers() {
+            const stages = interviewStages.querySelectorAll('.interview-stage');
+            stages.forEach((stage, index) => {
+                stage.querySelector('h4').textContent = `阶段 ${index + 1}`;
+            });
+        }
+
+        // 处理公司名称输入，自动匹配emoji
+        companyName.addEventListener('input', () => {
+            const name = companyName.value.trim();
+            if (name) {
+                // 尝试匹配公司名称
+                for (const [company, emoji] of Object.entries(companyEmojis)) {
+                    if (company.includes(name) || name.includes(company)) {
+                        companyEmoji.textContent = emoji;
+                        return;
+                    }
+                }
+                
+                // 默认emoji
+                companyEmoji.textContent = '🏢';
+            } else {
+                companyEmoji.textContent = '🏢';
+            }
+        });
+
+        // 处理图片上传
+        dropArea.addEventListener('click', () => {
+            imageUpload.click();
+        });
+
+        dropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropArea.classList.add('border-primary');
+        });
+
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.classList.remove('border-primary');
+        });
+
+        dropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropArea.classList.remove('border-primary');
+            
+            if (e.dataTransfer.files.length) {
+                handleImageUpload(e.dataTransfer.files[0]);
+            }
+        });
+
+        imageUpload.addEventListener('change', () => {
+            if (imageUpload.files.length) {
+                handleImageUpload(imageUpload.files[0]);
+            }
+        });
+
+        // 处理图片上传
+        function handleImageUpload(file) {
+            if (!file.type.startsWith('image/')) {
+                showToast('请上传图片文件', false);
+                return;
+            }
+            
+            // 显示OCR状态
+            ocrStatus.classList.remove('hidden');
+            ocrStatus.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i>正在识别图片...';
+            
+            // 使用Tesseract.js进行OCR
+            Tesseract.recognize(
+                file,
+                'chi_sim+eng',
+                {
+                    logger: info => {
+                        if (info.status === 'recognizing text') {
+                            const progress = Math.round(info.progress * 100);
+                            ocrStatus.innerHTML = `<i class="fa fa-spinner fa-spin mr-2"></i>正在识别图片... ${progress}%`;
+                        }
+                    }
+                }
+            ).then(result => {
+                const text = result.data.text;
+                console.log('OCR结果:', text);
+                
+                // 解析职位信息
+                const parsedData = parseJobInfoFromText(text);
+                
+                // 填充表单
+                if (parsedData.company) {
+                    companyName.value = parsedData.company;
+                    companyName.dispatchEvent(new Event('input'));
+                }
+                if (parsedData.position) {
+                    positionName.value = parsedData.position;
+                }
+                if (parsedData.description) {
+                    positionDesc.value = parsedData.description;
+                }
+                
+                // 隐藏OCR状态
+                ocrStatus.classList.add('hidden');
+                showToast('图片解析完成');
+            }).catch(error => {
+                console.error('OCR错误:', error);
+                ocrStatus.classList.add('hidden');
+                showToast('图片解析失败，请重试', false);
+            });
+        }
+
+        // 从文本中解析职位信息
+        function parseJobInfoFromText(text) {
+            const result = {
+                company: '',
+                position: '',
+                description: ''
+            };
+            
+            // 清理文本：去除多余空格、特殊符号
+            let cleanText = text
+                .replace(/\s+/g, ' ')  // 多个空格合并为一个
+                .replace(/[^\u4e00-\u9fa5a-zA-Z0-9\s：:，。！？、；\n\r]/g, '')  // 保留中文、英文、数字和基本标点
+                .replace(/\s*[:：]\s*/g, '：')  // 统一冒号格式
+                .replace(/\s*[，,]\s*/g, '，')  // 统一顿号格式
+                .replace(/\s*[。.]\s*/g, '。')  // 统一句号格式
+                .trim();
+            
+            console.log('清理后的文本:', cleanText);
+            
+            // 1. 尝试提取公司名称
+            const companyPatterns = [
+                /公司[:：]\s*([^\n\r]+)/i,
+                /公司名称[:：]\s*([^\n\r]+)/i,
+                /企业[:：]\s*([^\n\r]+)/i,
+                /单位[:：]\s*([^\n\r]+)/i,
+                /招聘单位[:：]\s*([^\n\r]+)/i,
+                /雇主[:：]\s*([^\n\r]+)/i,
+                /(?:^|\n)(.{2,10})\s*(?:招聘|招人|诚招|诚聘)/
+            ];
+            
+            for (const pattern of companyPatterns) {
+                const match = cleanText.match(pattern);
+                if (match && match[1]) {
+                    result.company = cleanNoise(match[1]);
+                    break;
+                }
+            }
+            
+            // 2. 尝试提取职位名称（更严格的匹配）
+            const positionPatterns = [
+                /职位[:：]\s*([^\n\r]{2,20})/i,
+                /岗位[:：]\s*([^\n\r]{2,20})/i,
+                /职位名称[:：]\s*([^\n\r]{2,20})/i,
+                /招聘岗位[:：]\s*([^\n\r]{2,20})/i,
+                /工作[:：]\s*([^\n\r]{2,20})/i,
+                /岗位名称[:：]\s*([^\n\r]{2,20})/i,
+                /(?:招聘|招人|诚招|诚聘)\s*([^\n\r]{2,20})\s*(?:工程师|经理|专员|助理|总监|主管|师|员|顾问|代表)/,
+                /(?:招聘|招人|诚招|诚聘)\s*([^\n\r]{2,20})/
+            ];
+            
+            for (const pattern of positionPatterns) {
+                const match = cleanText.match(pattern);
+                if (match && match[1]) {
+                    result.position = cleanNoise(match[1]);
+                    break;
+                }
+            }
+            
+            // 3. 尝试提取职位描述（更智能的提取）
+            const descPatterns = [
+                /职责[:：]([\s\S]*?)(?:要求[:：]|任职要求[:：]|岗位要求[:：]|任职资格[:：]|$)/i,
+                /工作内容[:：]([\s\S]*?)(?:要求[:：]|任职要求[:：]|岗位要求[:：]|任职资格[:：]|$)/i,
+                /岗位职责[:：]([\s\S]*?)(?:要求[:：]|任职要求[:：]|岗位要求[:：]|任职资格[:：]|$)/i,
+                /职位描述[:：]([\s\S]*?)(?:要求[:：]|任职要求[:：]|岗位要求[:：]|任职资格[:：]|$)/i,
+                /工作职责[:：]([\s\S]*?)(?:要求[:：]|任职要求[:：]|岗位要求[:：]|任职资格[:：]|$)/i,
+                /描述[:：]([\s\S]*?)(?:要求[:：]|任职要求[:：]|岗位要求[:：]|任职资格[:：]|$)/i,
+                /(?:职责|工作内容|岗位职责|职位描述|工作职责|描述)[:：]\s*([\s\S]+)/i
+            ];
+            
+            for (const pattern of descPatterns) {
+                const match = cleanText.match(pattern);
+                if (match && match[1]) {
+                    result.description = cleanDescription(match[1]);
+                    break;
+                }
+            }
+            
+            // 如果没有找到明确的描述，尝试智能提取
+            if (!result.description) {
+                result.description = extractDescriptionFromText(cleanText);
+            }
+            
+            console.log('解析结果:', result);
+            return result;
+        }
+        
+        // 清理噪声
+        function cleanNoise(text) {
+            if (!text) return '';
+            return text
+                .replace(/\s+/g, ' ')  // 去除多余空格
+                .replace(/[^\u4e00-\u9fa5a-zA-Z0-9\s\-_()（）【】]/g, '')  // 只保留中文、英文、数字和基本符号
+                .replace(/\s*([（）【】\-])\s*/g, '$1')  // 去除括号内外的空格
+                .trim();
+        }
+        
+        // 清理职位描述
+        function cleanDescription(text) {
+            if (!text) return '';
+            return text
+                .replace(/\s+/g, ' ')  // 去除多余空格
+                .replace(/[^\u4e00-\u9fa5a-zA-Z0-9\s，。！？、；：\-_()（）【】]/g, '')  // 保留中文、英文、数字和标点
+                .replace(/\s*([，。！？、；：\-_()（）【】])\s*/g, '$1')  // 去除标点前后的空格
+                .replace(/([，。！？、；：])\1+/g, '$1')  // 去除重复标点
+                .trim();
+        }
+        
+        // 从文本中智能提取描述
+        function extractDescriptionFromText(text) {
+            // 分割成句子
+            const sentences = text.split(/[。！？\n]/);
+            
+            // 过滤掉太短的句子和包含关键词的句子
+            const filteredSentences = sentences.filter(sentence => {
+                const trimmed = sentence.trim();
+                if (trimmed.length < 10) return false;  // 太短
+                if (trimmed.includes('要求') || trimmed.includes('任职') || trimmed.includes('资格')) return false;  // 排除要求部分
+                if (trimmed.includes('公司') || trimmed.includes('职位') || trimmed.includes('岗位')) return false;  // 排除标题
+                return true;
+            });
+            
+            // 取前3个有意义的句子
+            const description = filteredSentences.slice(0, 3).join('。').trim();
+            
+            return description.length > 0 ? description + '。' : '';
+        }
+
+        // 提交记录表单
+        recordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // 验证必填字段
+            if (!companyName.value.trim() || !positionName.value.trim() || !applyDate.value) {
+                showToast('请填写所有必填字段', false);
+                return;
+            }
+            
+            // 收集面试阶段数据
+            const stages = [];
+            const stageElements = interviewStages.querySelectorAll('.interview-stage');
+            
+            stageElements.forEach(stage => {
+                const type = stage.querySelector('.stage-type').value;
+                const date = stage.querySelector('.stage-date').value;
+                const status = stage.querySelector('.stage-status').value;
+                const notes = stage.querySelector('.stage-notes').value.trim();
+                
+                stages.push({ type, date, status, notes });
+            });
+            
+            // 确定状态（基于最后一个面试阶段）
+            let status = 'applied';
+            if (stages.length > 0) {
+                const lastStage = stages[stages.length - 1];
+                status = lastStage.type;
+            }
+            
+            // 创建记录对象
+            const record = {
+                company: companyName.value.trim(),
+                position: positionName.value.trim(),
+                notes: positionDesc.value.trim(),
+                date: applyDate.value,
+                stages: stages,
+                emoji: companyEmoji.textContent,
+                status: status
+            };
+            
+            try {
+                const token = getAuthToken();
+                let response;
+                
+                if (editingRecordId) {
+                    // 更新记录
+                    response = await fetch(`/api/records/${editingRecordId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(record)
+                    });
+                } else {
+                    // 创建新记录
+                    response = await fetch('/api/records', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(record)
+                    });
+                }
+                
+                if (response.ok) {
+                    const savedRecord = await response.json();
+                    
+                    // 更新本地记录
+                    if (editingRecordId) {
+                        const index = records.findIndex(r => r.id === editingRecordId);
+                        if (index !== -1) {
+                            records[index] = savedRecord;
+                        }
+                    } else {
+                        records.push(savedRecord);
+                    }
+                    
+                    // 应用筛选和排序
+                    applyFiltersAndSort();
+                    
+                    // 更新统计和显示
+                    updateStatistics();
+                    updateRecordsDisplay();
+                    
+                    // 关闭模态框
+                    closeRecordModal();
+                    
+                    // 显示提示
+                    showToast(editingRecordId ? '记录更新成功' : '记录添加成功');
+                } else {
+                    const errorData = await response.json();
+                    showToast(errorData.error || '保存失败', false);
+                }
+            } catch (error) {
+                console.error('Save record error:', error);
+                showToast('网络错误，请稍后重试', false);
+            }
+        });
+
+        // 编辑记录
+        function editRecord(id) {
+            const record = records.find(r => r.id === id);
+            if (!record) return;
+            
+            editingRecordId = id;
+            modalTitle.textContent = '编辑求职记录';
+            recordId.value = id;
+            
+            // 填充表单数据
+            companyName.value = record.company;
+            companyName.dispatchEvent(new Event('input'));
+            positionName.value = record.position;
+            positionDesc.value = record.notes || '';
+            applyDate.value = record.date;
+            
+            // 清空并填充面试阶段
+            interviewStages.innerHTML = '';
+            if (record.stages && record.stages.length > 0) {
+                record.stages.forEach(stage => {
+                    addInterviewStage(stage);
+                });
+            }
+            
+            // 显示模态框
+            recordModal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        // 确认删除记录
+        function confirmDeleteRecord(id) {
+            recordToDelete = id;
+            
+            // 显示删除确认模态框
+            deleteModal.classList.remove('hidden');
+            setTimeout(() => {
+                deleteModalContent.classList.remove('scale-95', 'opacity-0');
+                deleteModalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        // 关闭删除确认模态框
+        function closeDeleteModal() {
+            deleteModalContent.classList.remove('scale-100', 'opacity-100');
+            deleteModalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                deleteModal.classList.add('hidden');
+                recordToDelete = null;
+            }, 300);
+        }
+
+        cancelDelete.addEventListener('click', closeDeleteModal);
+
+        // 点击模态框外部关闭
+        deleteModal.addEventListener('click', (e) => {
+            if (e.target === deleteModal) {
+                closeDeleteModal();
+            }
+        });
+
+        // 确认删除记录
+        confirmDelete.addEventListener('click', async () => {
+            if (!recordToDelete) return;
+            
+            try {
+                const token = getAuthToken();
+                const response = await fetch(`/api/records/${recordToDelete}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    // 删除记录
+                    const index = records.findIndex(r => r.id === recordToDelete);
+                    if (index !== -1) {
+                        records.splice(index, 1);
+                        
+                        // 应用筛选和排序
+                        applyFiltersAndSort();
+                        
+                        // 更新统计和显示
+                        updateStatistics();
+                        updateRecordsDisplay();
+                        
+                        // 关闭模态框
+                        closeDeleteModal();
+                        
+                        // 显示提示
+                        showToast('记录删除成功');
+                    }
+                } else {
+                    const errorData = await response.json();
+                    showToast(errorData.error || '删除失败', false);
+                }
+            } catch (error) {
+                console.error('Delete record error:', error);
+                showToast('网络错误，请稍后重试', false);
+            }
+        });
+
+        // 切换视图
+        cardViewBtn.addEventListener('click', () => {
+            if (currentView === 'card') return;
+            
+            currentView = 'card';
+            cardViewBtn.classList.remove('bg-gray-200', 'text-gray-700');
+            cardViewBtn.classList.add('bg-primary', 'text-white');
+            timelineViewBtn.classList.remove('bg-primary', 'text-white');
+            timelineViewBtn.classList.add('bg-gray-200', 'text-gray-700');
+            
+            // 先淡出时间轴视图
+            if (!timelineContainer.classList.contains('hidden')) {
+                timelineContainer.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                timelineContainer.style.opacity = '0';
+                timelineContainer.style.transform = 'translateX(-20px)';
+                
+                setTimeout(() => {
+                    timelineContainer.classList.add('hidden');
+                    
+                    // 淡入卡片视图
+                    recordsContainer.classList.remove('hidden');
+                    recordsContainer.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                    recordsContainer.style.opacity = '0';
+                    recordsContainer.style.transform = 'translateX(20px)';
+                    
+                    setTimeout(() => {
+                        recordsContainer.style.opacity = '1';
+                        recordsContainer.style.transform = 'translateX(0)';
+                    }, 10);
+                }, 300);
+            } else {
+                // 如果时间轴视图已经隐藏，直接显示卡片视图
+                recordsContainer.classList.remove('hidden');
+                recordsContainer.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                recordsContainer.style.opacity = '1';
+                recordsContainer.style.transform = 'translateX(0)';
+            }
+            
+            updateRecordsDisplay();
+        });
+
+        timelineViewBtn.addEventListener('click', () => {
+            if (currentView === 'timeline') return;
+            
+            currentView = 'timeline';
+            timelineViewBtn.classList.remove('bg-gray-200', 'text-gray-700');
+            timelineViewBtn.classList.add('bg-primary', 'text-white');
+            cardViewBtn.classList.remove('bg-primary', 'text-white');
+            cardViewBtn.classList.add('bg-gray-200', 'text-gray-700');
+            
+            // 先淡出卡片视图
+            if (!recordsContainer.classList.contains('hidden')) {
+                recordsContainer.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                recordsContainer.style.opacity = '0';
+                recordsContainer.style.transform = 'translateX(20px)';
+                
+                setTimeout(() => {
+                    recordsContainer.classList.add('hidden');
+                    
+                    // 淡入时间轴视图
+                    timelineContainer.classList.remove('hidden');
+                    timelineContainer.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                    timelineContainer.style.opacity = '0';
+                    timelineContainer.style.transform = 'translateX(-20px)';
+                    
+                    setTimeout(() => {
+                        timelineContainer.style.opacity = '1';
+                        timelineContainer.style.transform = 'translateX(0)';
+                    }, 10);
+                }, 300);
+            } else {
+                // 如果卡片视图已经隐藏，直接显示时间轴视图
+                timelineContainer.classList.remove('hidden');
+                timelineContainer.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                timelineContainer.style.opacity = '1';
+                timelineContainer.style.transform = 'translateX(0)';
+            }
+            
+            updateRecordsDisplay();
+        });
+
+        // 搜索输入事件
+        searchInput.addEventListener('input', debounce(() => {
+            applyFiltersAndSort();
+        }, 300));
+
+        // 状态筛选事件
+        statusFilter.addEventListener('change', () => {
+            applyFiltersAndSort();
+        });
+
+        // 排序事件
+        sortBy.addEventListener('change', () => {
+            applyFiltersAndSort();
+        });
+
+        // 防抖函数
+        function debounce(func, wait) {
+            let timeout;
+            return function() {
+                const context = this;
+                const args = arguments;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    func.apply(context, args);
+                }, wait);
+            };
+        }
+
+        // 添加卡片粘性悬停效果
+        function addCardHoverEffect(card) {
+            let isHovering = false;
+            let lastMouseMoveTime = 0;
+            const throttleDelay = 16;
+            
+            card.addEventListener('mouseenter', () => {
+                isHovering = true;
+            });
+            
+            card.addEventListener('mousemove', (e) => {
+                if (!isHovering) return;
+                
+                const now = Date.now();
+                if (now - lastMouseMoveTime < throttleDelay) return;
+                lastMouseMoveTime = now;
+                
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 80;
+                const rotateY = (centerX - x) / 80;
+                
+                card.style.transition = 'transform 0.15s ease-out';
+                card.style.transform = `translateY(-4px) perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                isHovering = false;
+                card.style.transition = 'transform 0.3s ease-out';
+                card.style.transform = '';
+            });
+        }
+
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUserData();
+            
+            // 为所有卡片添加悬停效果
+            const observer = new MutationObserver(() => {
+                document.querySelectorAll('.card-hover').forEach(card => {
+                    // 跳过模态框内的元素
+                    if (card.closest('#delete-modal') || card.closest('#record-modal')) {
+                        return;
+                    }
+                    
+                    if (!card.dataset.hoverEffectAdded) {
+                        addCardHoverEffect(card);
+                        card.dataset.hoverEffectAdded = 'true';
+                    }
+                });
+            });
+            
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+            
+            // 添加装饰元素的视差效果（使用节流优化性能）
+            let lastMouseMoveTime = 0;
+            const throttleDelay = 16; // 约60fps
+            
+            document.addEventListener('mousemove', (e) => {
+                const now = Date.now();
+                if (now - lastMouseMoveTime < throttleDelay) return;
+                lastMouseMoveTime = now;
+                
+                const decorativeElements = document.querySelectorAll('.decorative-element');
+                const mouseX = e.clientX / window.innerWidth - 0.5;
+                const mouseY = e.clientY / window.innerHeight - 0.5;
+                
+                decorativeElements.forEach((element, index) => {
+                    const speed = (index % 3 + 1) * 3;
+                    const x = mouseX * speed;
+                    const y = mouseY * speed;
+                    element.style.transform = `translate(${x}px, ${y}px)`;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
